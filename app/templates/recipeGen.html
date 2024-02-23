@@ -1,0 +1,83 @@
+<!-- 
+Feb 16, 2024
+Michael Karas
+    
+The following html shown on the screen will help guide the user make a recipe based on their input
+
+Input -> either text or text to speech (TTS is not a priority atm)
+Input is then sent via an API request to chat gpt to procure a step by step recipe.
+
+This output is then use to in "recipeSteps" to make visuals via Dallie3
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="../static/style.css">
+    
+</head>
+<body class="bg-blue-400">
+
+    <div class="space-y-4">
+        <div class="flex flex-col items-center">
+            <h1 class="text-4xl">Time to generate your recipe!</h1>
+            <h2 class="text-2xl">What food do you have in your fridge</h2>
+            <br>
+
+            <form action = "/recipeGen" method="post">
+                <div class="flex flex-col items-center space-y-4">
+                    <button type="button" class="h-10 px-6 font-semibold rounded-full bg-black text-white" onclick="addInput()">
+                        Add More
+                    </button>
+
+                    <!-- Div to input what is in the users fridge --> 
+                    <div id="input-container" class = "flex flex-wrap space-x-4 justify-center mx-auto  ">
+                        {% for i in range(3) %}
+                            <input class="rounded-md " type="text" name="input{{ i }}" placeholder="Ingredient #{{ i + 1 }}">
+                        {% endfor %}
+                    </div>
+                    <button type = "submit" class="h-12 px-8 font-semibold rounded-full bg-black text-white">
+                        Generate your Recipe
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- This container is to display the response from chatgpt on what to suggest to make with what is in the fridge -->
+        <div class="flex flex-col items-center space-y-4 ">
+            {% if suggestions %}
+                <h2>Here are your suggested meals based on whats in your fridge</h2>
+                <br>
+                {%for foodIdeas in suggestions%}
+                <div class = "w-1/2 border-2 border-black bg-blue-200 p-3 rounded-md">
+                        <p >{{ foodIdeas}}</p>
+                </div>
+                {% endfor %}
+
+                <h2>Which of the following would you like to try?</h2>
+
+                <!-- The following block of code is going to be usedd to progress to the next step of the app
+                The next step is to generate the steps of how to cook the dish Chatgpt has suggested
+                The  -->
+                <form action ="/recipeSteps" method="post">
+                    {% for dishes in dishName %}
+                        <button type ="submit" class="h-12 px-8 font-semibold rounded-full  bg-black text-white" name ="selectedDish" value = "{{ dishes }}">{{ dishes }}</button>
+                    <!-- The following below is to pass the value of dishes through JS, having issues with following wup and putting it into flask -->
+                    {% endfor %}
+                </form>
+
+            {% else %}
+                <p>No suggestions available.</p>
+            {% endif%}
+        </div>
+    </div>
+
+
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

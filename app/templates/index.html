@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body class="bg-blue-400">
+    <div class="space-y-4 mx-auto ">
+
+        <div class="flex flex-col justify-center items-center font-bold" >
+            <h1 class="text-4xl underline ">Welcome to Cooking Companion!</h1>
+            <div class="flex flex-col items-center text-2xl italic">
+                <h2>The AI that helps you cook with</h2>
+                <h2>with what you got</h2>
+                <h2>to reduce your waste</h2>
+            </div>
+        </div>
+        <div class=" shadow rounded flex justify-around ">
+            <button class="h-12 px-8 font-semibold rounded-full bg-black text-white"  onclick="openPage('/recipeGen')">Click me to go to make a recipe</button>
+            <button class="h-12 px-8 font-semibold rounded-full bg-black text-white" onclick="openPage('/savedRecipes')">Click me to go to your saved recipes</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

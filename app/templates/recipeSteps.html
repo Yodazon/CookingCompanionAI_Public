@@ -1,0 +1,59 @@
+<!-- 
+    Feb 16, 2024
+    Michael Karas
+
+    The following file is to show outputs of the steps needed to make a recipe based on the API call in recipeGen/Chat gpt
+
+    In this file, we will use Dallie 3 to generate images based on the steps that were generated
+ -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steps of the Recipe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+</head>
+<body class="bg-blue-400">
+    <div class="flex flex-col items-center space-y-4">
+        <div>
+            <h1 class="text-4xl">Time to Prep!</h1>
+        </div>
+
+        <div class="flex flex-col items-center space-y-4">
+            <h1 class="text-2xl">You have chosen to make the {{dish}}! A delicious choice, click the button below to see how you can make it in your kitchen!</h1>
+            <form action="/generateImagesAndSteps", method="post">
+                <button name= "dish" class="h-12 px-8 font-semibold rounded-full  bg-black text-white" value="{{dish}}">Make my {{ dish }}!</button>
+            </form>
+        </div>
+
+
+        {%if dishZipped %}
+        <div class="flex flex-col items-center space-y-4">
+            <div>
+                <p>Steps are as followed</p>
+                <form action="/saveCompletion", method="post">
+                    <button class="h-12 px-6 font-semibold rounded-full  bg-black text-white" value = {{dish}}>Save Your Recipe!</button>
+                </form>
+            </div>
+            {% for image, text in dishZipped %}
+                <div class="w-1/2 border-2 border-black bg-blue-200 p-3 flex flex-col items-center">
+                    <img style = "width: 250px; height: 250px;"src=" {{url_for('generatedImages', filename=image )}}" alt ="image">
+                    <p>{{ text }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No steps shown yet!</p>
+        </div>
+        {% endif%}
+    </div>
+    
+
+    
+</body>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</html>
